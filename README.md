@@ -1,6 +1,6 @@
 # wav_to_transcript
 
-Create a transcript.txt from audio wav files to be used in [dc_tts](https://github.com/Kyubyong/dc_tts), breaking large files into small pieces and converting to the recommended format. This use Google's voice recognition to prepare a basis for transcription.
+Prepare audio files while creating a transcript.txt to be used in [dc_tts](https://github.com/Kyubyong/dc_tts), breaking large files into small pieces and converting to the recommended format. This use Google's voice recognition to prepare a basis for transcription.
 
 ## Requirements
 * NumPy

@@ -29,7 +29,7 @@ def prepareTranscript():
 
 def createProcessedTranscript():   
     global file
-    file = open("{}/_data/_{}".format(inputFolder, config.transcript_name), 'w')
+    file = open("{}/_data/_new_{}".format(inputFolder, config.transcript_name), 'w')
     print('Created transcript')
 
 

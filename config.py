@@ -10,6 +10,9 @@ keep_silence = 200 #ms
 speech_to_text = True
 language = 'es-AR'
 
+# https://pypi.org/project/num2words/
+language_Num2words = 'es'
+
 # output files mhz
 outrate = 22050
 

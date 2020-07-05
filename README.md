@@ -8,6 +8,7 @@ Prepare audio files while creating a transcript.txt to be used in [dc_tts](https
 * Soundfile
 * SpeechRecognition
 * Librosa
+* num2words
 
 ## Usage
 * Adjust audio parameters and language in config.py

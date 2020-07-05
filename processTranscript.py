@@ -7,6 +7,9 @@ import config
 
 def prepareTranscript():
 
+    global inputFolder
+    global transcript
+
     if len(sys.argv) < 2:
         print('Folder argument missing')
         exit()
@@ -17,24 +20,33 @@ def prepareTranscript():
         print('Folder not found')
         exit()
 
-    transcript = "./{}/_data/{}".format(inputFolder, config.transcript_name)
+    transcript = "{}/_data/{}".format(inputFolder, config.transcript_name)
     
     if not os.path.isfile(transcript):
-        print('Trasncript not found')
+        print('Transcript not found')
         exit()
+    
 
+def createProcessedTranscript():   
+    global file
+    file = open("{}/_data/_{}".format(inputFolder, config.transcript_name), 'w')
+    print('Created transcript')
+
+
+def process():
+    
     global errors
     errors = []
-    
+
     for line in open(transcript, 'r'):
         fields = line.split('|')
 
-        transcriptRaw = cleanRawField(fields[1])
-        transcriptFiltered = cleanFilteredField(fields[1])
+        fields[1] = cleanRawField(fields[1])
+        fields[2] = cleanFilteredField(fields[1])
 
-        print(transcriptRaw)
-        print(transcriptFiltered)
-    
+        line = '|'.join(fields)
+        writeLine(line)
+
 
 def cleanRawField(field):
     field = field.replace("…", "...")
@@ -43,8 +55,6 @@ def cleanRawField(field):
 
 
 def cleanFilteredField(field):
-    field = re.sub("()«»\"\'","", field)
-
     # find numbers
     numbers = re.findall('\d+', field)
     if len(numbers) > 0:
@@ -54,20 +64,28 @@ def cleanFilteredField(field):
                 field = field.replace(number, textNumber)
             except:
                 errors.append('ERROR converting {} to words'.format(number))
+    
+    # preserve only wanted characters
+    field = re.sub("[^" + config.acceptedVocab + "]+","", field)
 
     return field
 
 
-def createProcessedTranscript():   
-    file = open(outputFolder + '/_tmp_' + config.transcript_name, 'w')
-    file.close()
-    print('Created transcript')
+def writeLine(line):   
+    file.write(line)
+    print(line)
 
 
 def printErrors():
-    for error in errors:
-        print(error)
+    if not len(errors):
+        print('No errors found')
+    else:
+        for error in errors:
+            print(error)
 
 
 prepareTranscript()
+createProcessedTranscript()
+process()
 printErrors()
+print('Done')

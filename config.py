@@ -13,6 +13,8 @@ language = 'es-AR'
 # https://pypi.org/project/num2words/
 language_Num2words = 'es'
 
+acceptedVocab = u'''␀␃ !',-.:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz¡¿ÁÅÉÍÓÚáæèéëíîñóöúü—'''
+
 # output files mhz
 outrate = 22050
 

@@ -12,7 +12,7 @@ Prepare audio files while creating a transcript.txt to be used in [dc_tts](https
 ## Usage
 * Adjust audio parameters and language in config.py
 * Place all the wav files to be processed in the same folder
-* Run `python process.py [folderName]`
+* Run `python processAudio.py [folderName]`
 * The converted files and the transcript are created in the subfolder '_data'
 
 ### Specs of processed audio files:

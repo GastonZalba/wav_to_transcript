@@ -13,19 +13,46 @@ import config
 import speech_recognition as sr
 r = sr.Recognizer()
 
+def prepareFolders():
+    
+    print('Start')
+
+    global inputFolder
+    global tmpFolder
+    global outputFolder
+
+    if len(sys.argv) < 2:
+        print('Folder argument missing')
+        exit()
+
+    inputFolder = str(sys.argv[1])            
+
+    if not os.path.exists(inputFolder):
+        print('Folder not found')
+        exit()
+
+    tmpFolder = "./{}/_tmp".format(inputFolder) # for audio Chunks
+    outputFolder = "./{}/_data/".format(inputFolder)
+    
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)  # create output folder
+
+    if not os.path.exists(tmpFolder):
+        os.makedirs(tmpFolder)  # create tmp folder
+    
+    print('Folders created:', outputFolder , tmpFolder)
+
 
 def splitFilesBySilence():
 
-    print('File splitting started')
+    print('Files splitting started')
 
     exclude = set(['_tmp', '_data'])
     for dirpath, subdirs, files in os.walk(inputFolder, topdown=True):
         subdirs[:] = [d for d in subdirs if d not in exclude]
         for file in files:
             fileName = clean_filename(file)
-            print('Splitted', fileName)
             split(os.path.join(dirpath, file), fileName)
-
 
 def mergePieces():
 
@@ -78,7 +105,6 @@ def mergePieces():
 
                 writeTranscript(dir, fileOutput, duration, outfile)
 
-            os.remove(tmpFolder)
             print('Total files:', len(data))
             
 
@@ -125,6 +151,9 @@ def writeTranscript(dir, fileOutput, duration, outfile):
 
 
 def split(filepath, fileName):
+
+    print('Splitting', fileName)
+
     sound = AudioSegment.from_wav(filepath)
     dBFS = sound.dBFS
     chunks = split_on_silence(
@@ -145,43 +174,11 @@ def split(filepath, fileName):
         os.makedirs(tmpSubfolder)  # create output subfolder
 
     print('Created folder', fileName)
-    print('Splitted in', len(chunks), 'chunks')
+    print('Splitted', fileName, 'in', len(chunks), 'chunks')
 
     for i, chunk in enumerate(chunks):
         chunk.export(tmpFolder + '/' + fileName + '/' +
                      fileName + "_{:04d}.wav".format(i), format="wav")
-
-
-inputFolder = ''
-tmpFolder = ''
-outputFolder = ''
-
-def prepareFolders():
-
-    global inputFolder
-    global tmpFolder
-    global outputFolder
-
-    if len(sys.argv) < 2:
-        print('Folder argument missing')
-        exit()
-
-    inputFolder = str(sys.argv[1])            
-
-    if not os.path.exists(inputFolder):
-        print('Folder not found')
-        exit()
-
-    tmpFolder = "./{}/_tmp".format(inputFolder) # for audio Chunks
-    outputFolder = "./{}/_data/".format(inputFolder)
-    
-    if not os.path.exists(outputFolder):
-        os.makedirs(outputFolder)  # create output folder
-
-    if not os.path.exists(tmpFolder):
-        os.makedirs(tmpFolder)  # create tmp folder
-    
-    print('Folders created', outputFolder , tmpFolder)
 
 
 # Remove accents, whitespaces and Uppercases
@@ -194,8 +191,18 @@ def strip_accents(s):
     return ''.join(c for c in unicodedata.normalize('NFD', s)
                    if unicodedata.category(c) != 'Mn')
 
+def deleteTmp():
+    for root, dirs, files in os.walk(tmpFolder, topdown=False):
+        for name in files:
+            os.remove(os.path.join(root, name))
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+    
+    os.rmdir(tmpFolder)
+    print('Temporary files removed')
 
 prepareFolders()
 splitFilesBySilence()
 mergePieces()
+deleteTmp()
 print('Done')

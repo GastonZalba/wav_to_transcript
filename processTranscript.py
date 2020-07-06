@@ -14,7 +14,8 @@ def processLines():
         fields = line.split('|')
 
         fields[1] = cleanRawField(fields[1])
-        fields[2] = cleanFilteredField(fields[1])
+        
+        fields.insert(2, cleanFilteredField(fields[1]) )
 
         line = '|'.join(fields)
         hp.writeLine(line, newTranscript)

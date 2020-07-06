@@ -31,9 +31,8 @@ def prepareTranscriptLine(fileOutput, duration):
     else:
         text = '*'
 
-    line = fileOutput + '|'  # file
-    line += text + '|' # transcript 1
-    line += '*|' # transcript 2
+    line = fileOutput + '|' # file
+    line += text + '|' # transcript
     line += str(duration) # length in seconds
     line += "\n"
     

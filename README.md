@@ -6,36 +6,36 @@ Prepare audio files while creating a transcript.txt to be used in [dc_tts](https
 * NumPy
 * PyDub
 * Soundfile
-* SpeechRecognition
 * Librosa
-* num2words (in processTranscript.py)
+* SpeechRecognition (`createTranscript.py`)
+* num2words (`processTranscript.py`)
 
-## Step 1: split audio files
-* Adjust audio parameters(silences, db) and language in config.py
+## Step 1: Audio files splitting 
+* Adjust audio parameters (silence, max_duration, language) in `config.py`
 * Place all the wav files to be processed in the same folder
-* Run `python processAudio.py [folderName]`
-* The converted files and the transcript are created in the subfolder '_data'
+* Run `python processAudio.py [folderName]` to convert and trim the audio files.
+* This will create multiple audio files with the following characteristics:
+    * PCM wav
+    * mono
+    * 32 bits
+    * 22.050 Mhz
+    * Duration up to 10 seconds (default)
 
-### Specs of processed audio files:
-* PCM wav
-* mono
-* 32 bits
-* 22.050Mhz
-* Up to 10 seconds
+## Step 2: Transcript creation
+* Run `python createTranscript.py [folderName]` to create the transcript from the generated audio files.
+* Check and correct the text transcripts
+* Transcript.txt structure:
 
-## Step 2: create the transcription
-* Run `python createTranscript.py [folderName]` to automatically complete the cleaned trasncription in field *. This will remove unwanted characters, and convert numbers to words.
-
-* You must check and correct the recognized text.
-
-### The transcription.txt has the following structure:
-[Path to file] | [Text automatically recognized] | * | [duration in seconds]<br>
-
-## Step 3: complete the transcription
-* Run `python processTranscript.py [folderName]` to automatically complete the cleaned trasncription in field *. This will remove unwanted characters, and convert numbers to words.
+| FolderName/FileName                  | Automatically recognized text   | Audio length (seconds)
+| --------------------- | -------------------------------  | ------------------ 
+| sampleFolder/sampleFile_0001.wav   | This is an automatic transcript and may contains numbers (1, 2) and some punctuation marks ('"-) | 3.10
+| sampleFolder/sampleFile_0002.wav   | This line may have errors, but it's a good start | 1.10 
 
 
+
+## Step 3: Finishing the transcript
+* After the transcription is corrected, run `python processTranscript.py [folderName]` to automatically add a third column with a cleaned version of the transcription. This also will remove some unwanted characters and convert numbers to words
+* Check and correct
 
 ## Todo
 - Allow more voice recognition services.
-- Add function to clean numbers and punctuaction signs in the transcript.txt to fill rhe * column.

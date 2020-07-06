@@ -19,19 +19,21 @@ def processAudioFiles():
             infiles = glob.glob( "{}/{}/*.wav".format(outputFolder, dir))
             
             for infile in infiles:
-                duration = round(librosa.get_duration(filename=infile), 2)           
-                line = prepareTranscriptLine(infile.replace('\\', '/'), duration)
+                duration = round(librosa.get_duration(filename=infile), 2)   
+                path = os.path.split(infile)
+                filename = dir + '/' + path[len(path) -1]       
+                line = prepareTranscriptLine(infile, filename, duration)
                 hp.writeLine(line, transcript)
 
 
-def prepareTranscriptLine(fileOutput, duration):
+def prepareTranscriptLine(fileOutput, filename, duration):
 
     if config.speech_to_text:
         text = speechToText(fileOutput)
     else:
         text = '*'
 
-    line = fileOutput + '|' # file
+    line = filename + '|' # file
     line += text + '|' # transcript
     line += str(duration) # length in seconds
     line += "\n"

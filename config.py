@@ -1,5 +1,5 @@
 # merge files up to this seconds
-max_duration = 10
+max_duration = 7
 
 # split_on_silence
 min_silence_len = 200 #ms

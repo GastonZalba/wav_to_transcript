@@ -8,10 +8,10 @@ Prepare audio files while creating a transcript.txt to be used in [dc_tts](https
 * Soundfile
 * SpeechRecognition
 * Librosa
-* num2words
+* num2words (in processTranscript.py)
 
-## Usage
-* Adjust audio parameters and language in config.py
+## Step 1: split audio files
+* Adjust audio parameters(silences, db) and language in config.py
 * Place all the wav files to be processed in the same folder
 * Run `python processAudio.py [folderName]`
 * The converted files and the transcript are created in the subfolder '_data'
@@ -23,10 +23,18 @@ Prepare audio files while creating a transcript.txt to be used in [dc_tts](https
 * 22.050Mhz
 * Up to 10 seconds
 
-### Transcription
-The transcription.txt has the following structure:<br>
-[folderName]/[filename]_0001.wav | [Automatically recognized text] | * | [duration in seconds]<br>
-You must check and correct the recognized text and fill the * column accordingly.
+## Step 2: create the transcription
+* Run `python createTranscript.py [folderName]` to automatically complete the cleaned trasncription in field *. This will remove unwanted characters, and convert numbers to words.
+
+* You must check and correct the recognized text.
+
+### The transcription.txt has the following structure:
+[Path to file] | [Text automatically recognized] | * | [duration in seconds]<br>
+
+## Step 3: complete the transcription
+* Run `python processTranscript.py [folderName]` to automatically complete the cleaned trasncription in field *. This will remove unwanted characters, and convert numbers to words.
+
+
 
 ## Todo
 - Allow more voice recognition services.

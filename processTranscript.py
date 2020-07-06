@@ -1,39 +1,11 @@
-import os
-import sys
 import re
 from num2words import num2words
 
 import config
-
-def prepareTranscript():
-
-    global inputFolder
-    global transcript
-
-    if len(sys.argv) < 2:
-        print('Folder argument missing')
-        exit()
-
-    inputFolder = str(sys.argv[1])            
-
-    if not os.path.exists(inputFolder):
-        print('Folder not found')
-        exit()
-
-    transcript = "{}/_data/{}".format(inputFolder, config.transcript_name)
-    
-    if not os.path.isfile(transcript):
-        print('Transcript not found')
-        exit()
-    
-
-def createProcessedTranscript():   
-    global file
-    file = open("{}/_data/_new_{}".format(inputFolder, config.transcript_name), 'w')
-    print('Created transcript')
+import helpers as hp
 
 
-def process():
+def processLines():
     
     global errors
     errors = []
@@ -45,7 +17,7 @@ def process():
         fields[2] = cleanFilteredField(fields[1])
 
         line = '|'.join(fields)
-        writeLine(line)
+        hp.writeLine(line, newTranscript)
 
 
 def cleanRawField(field):
@@ -62,7 +34,7 @@ def cleanFilteredField(field):
             try:
                 textNumber = num2words(number, lang=config.language_Num2words)
                 field = field.replace(number, textNumber)
-            except:
+            except Exception:
                 errors.append('ERROR converting {} to words'.format(number))
     
     # preserve only wanted characters
@@ -71,21 +43,13 @@ def cleanFilteredField(field):
     return field
 
 
-def writeLine(line):   
-    file.write(line)
-    print(line)
+print('>> Start')
 
+inputFolder = hp.getFolder(hp.getArgument(1))   
 
-def printErrors():
-    if not len(errors):
-        print('No errors found')
-    else:
-        for error in errors:
-            print(error)
+transcript = hp.checkInputFile( "{}/_data/{}".format( inputFolder, config.transcript_name) )
+newTranscript = hp.createFile( inputFolder + '/_data/', "_new_" + config.transcript_name)
 
-
-prepareTranscript()
-createProcessedTranscript()
-process()
-printErrors()
-print('Done')
+processLines()
+hp.printErrors(errors)
+print('>> Done')

@@ -1,5 +1,6 @@
 import sys
 import os
+import codecs
 
 def getArgument(num):
     if len(sys.argv) < (num+1):
@@ -39,7 +40,7 @@ def printErrors(errors):
 
 
 def createFile(folder, filename):   
-    file = open("{}/{}".format(folder, filename), 'w')
+    file = codecs.open("{}/{}".format(folder, filename), 'w', 'utf-8-sig')
     print('>> Created file', filename)
     return file
 

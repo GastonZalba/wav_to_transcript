@@ -64,7 +64,7 @@ print('>> Start')
 inputFolder = hp.getFolder(hp.getArgument(1))
 outputFolder = "{}/_data".format(inputFolder)
 
-transcript = hp.createFile(outputFolder, config.transcript_name)
+transcript = hp.createFile(outputFolder, '_base_' + config.transcript_name)
 processAudioFiles()
 hp.printErrors(errors)
 print('>> Done')

@@ -51,8 +51,8 @@ print('>> Start')
 
 inputFolder = hp.getFolder(hp.getArgument(1))   
 
-transcript = hp.checkInputFile( "{}/_data/{}".format( inputFolder, config.transcript_name) )
-newTranscript = hp.createFile( inputFolder + '/_data/', "_new_" + config.transcript_name)
+transcript = hp.checkInputFile( "{}/_data/{}".format( inputFolder, '_base_' + config.transcript_name) )
+newTranscript = hp.createFile( inputFolder + '/_data/', config.transcript_name)
 
 processLines()
 hp.printErrors(errors)

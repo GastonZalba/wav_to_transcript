@@ -16,7 +16,6 @@ def processLines():
     for line in lines:
         fields = line.split('|')
 
-        print(line)
         fields[1] = cleanRawField(fields[1])
         
         fields.insert(2, cleanFilteredField(fields[1]) )

@@ -1,5 +1,6 @@
 import re
 from num2words import num2words
+import codecs
 
 import config
 import helpers as hp
@@ -10,9 +11,12 @@ def processLines():
     global errors
     errors = []
 
-    for line in open(transcript, 'r'):
+    lines = codecs.open(transcript, 'r', 'utf-8-sig').readlines()
+
+    for line in lines:
         fields = line.split('|')
 
+        print(line)
         fields[1] = cleanRawField(fields[1])
         
         fields.insert(2, cleanFilteredField(fields[1]) )
